@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WizLib_DataAccess.Data;
@@ -31,6 +32,81 @@ namespace WizLib.Controllers
                 return NotFound();
 
             return View(obj);      
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upsert(Category obj)
+        {
+            if(ModelState.IsValid)
+            {
+                if(obj.Category_Id == 0)
+                {
+                    //this is create
+                    _db.Categories.Add(obj);
+                }
+                else
+                {
+                    //this is an update
+                    _db.Categories.Update(obj);
+                }
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(obj);
+        }
+        public IActionResult Delete(int id)
+        {
+            var objFormDb = _db.Categories.FirstOrDefault(u => u.Category_Id == id);
+            _db.Categories.Remove(objFormDb);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult CreateMultiple2()
+        {
+            List<Category> catList = new List<Category>();
+            for (int i = 1; i <= 2; i++)
+            {
+                catList.Add(new Category { Name = Guid.NewGuid().ToString() });
+                //_db.Categories.Add(new Category { Name = Guid.NewGuid().ToString() });
+            }
+            _db.Categories.AddRange(catList);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult CreateMultiple5()
+        {
+            List<Category> catList = new List<Category>();
+            for (int i = 1; i <= 5; i++)
+            {
+                catList.Add(new Category { Name = Guid.NewGuid().ToString() });
+                //_db.Categories.Add(new Category { Name = Guid.NewGuid().ToString() });
+            }
+            _db.Categories.AddRange(catList);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RemoveMultiple2()
+        {
+            IEnumerable<Category> catList = _db.Categories
+                            .OrderByDescending(u => u.Category_Id).Take(2).ToList();
+
+            _db.Categories.RemoveRange(catList);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RemoveMultiple5()
+        {
+            List<Category> catList = _db.Categories
+                            .OrderByDescending(u => u.Category_Id).Take(5).ToList();
+
+            _db.Categories.RemoveRange(catList);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
