@@ -10,8 +10,8 @@ using WizLib_DataAccess.Data;
 namespace WizLib_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220621194117_ReAddCategory")]
-    partial class ReAddCategory
+    [Migration("20220623153504_ReCreateDB")]
+    partial class ReCreateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
