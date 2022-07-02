@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WizLib_DataAccess.Migrations
 {
-    public partial class ReCreateDB : Migration
+    public partial class CreateDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -163,7 +163,7 @@ namespace WizLib_DataAccess.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    BookDetail_Id = table.Column<int>(type: "int", nullable: false),
+                    BookDetail_Id = table.Column<int>(type: "int", nullable: true),
                     Publisher_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -174,7 +174,7 @@ namespace WizLib_DataAccess.Migrations
                         column: x => x.BookDetail_Id,
                         principalTable: "BookDetails",
                         principalColumn: "BookDetail_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Publisher_Publisher_Id",
                         column: x => x.Publisher_Id,
@@ -240,7 +240,8 @@ namespace WizLib_DataAccess.Migrations
                 name: "IX_Books_BookDetail_Id",
                 table: "Books",
                 column: "BookDetail_Id",
-                unique: true);
+                unique: true,
+                filter: "[BookDetail_Id] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_Publisher_Id",

@@ -65,6 +65,11 @@ namespace Model.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalCost")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("decimal(16,2)")
+                        .HasComputedColumnSql("[Quantity] * [UnitCost]");
+
                     b.Property<decimal>("UnitCost")
                         .HasColumnType("decimal(16,2)");
 
@@ -84,6 +89,11 @@ namespace Model.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

@@ -17,6 +17,9 @@ namespace Model
         [Column(TypeName = "decimal(16,2)")]
         [Range(0.01,100.00,ErrorMessage ="Unit cost must be between 0.01 and 100.")]
         public decimal UnitCost { get; set; }
+        [Column(TypeName = "decimal(16,2)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal TotalCost { get; set; }
         [NotMapped]
         public  string Secret { get; set; }
         public int ExpenseHeaderId { get; set; }
