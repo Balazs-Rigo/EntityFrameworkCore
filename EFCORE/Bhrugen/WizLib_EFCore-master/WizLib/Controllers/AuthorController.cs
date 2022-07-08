@@ -5,7 +5,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WizLib_DataAccess.Data;
-using WizLib_DataAccess.Migrations;
 using WizLib_Model.Models;
 
 namespace WizLib.Controllers
