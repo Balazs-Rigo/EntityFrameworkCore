@@ -4,6 +4,7 @@ using EFCoreMovies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220709100436_MoviesActors")]
+    partial class MoviesActors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,6 @@ namespace EFCoreMovies.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Biography")
-                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateOfBirth")
@@ -156,13 +157,6 @@ namespace EFCoreMovies.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Action"
-                        });
                 });
 
             modelBuilder.Entity("EFCoreMovies.Entities.Movie", b =>
@@ -177,9 +171,9 @@ namespace EFCoreMovies.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("PosterURL")
-                        .HasMaxLength(500)
+                        .HasMaxLength(150)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(150)");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("date");
