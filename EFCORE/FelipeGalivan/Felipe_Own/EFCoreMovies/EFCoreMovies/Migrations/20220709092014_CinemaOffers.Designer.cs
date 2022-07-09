@@ -4,6 +4,7 @@ using EFCoreMovies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220709092014_CinemaOffers")]
+    partial class CinemaOffers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,31 +65,13 @@ namespace EFCoreMovies.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Cinemas");
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.CinemaHall", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CinemaId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Cost")
+                    b.Property<decimal>("Price")
                         .HasPrecision(9, 2)
                         .HasColumnType("decimal(9,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CinemaId");
-
-                    b.ToTable("CinemaHalls");
+                    b.ToTable("Cinemas");
                 });
 
             modelBuilder.Entity("EFCoreMovies.Entities.CinemaOffer", b =>
@@ -166,17 +150,6 @@ namespace EFCoreMovies.Migrations
                     b.ToTable("Movies");
                 });
 
-            modelBuilder.Entity("EFCoreMovies.Entities.CinemaHall", b =>
-                {
-                    b.HasOne("EFCoreMovies.Entities.Cinema", "Cinema")
-                        .WithMany("CinemaHalls")
-                        .HasForeignKey("CinemaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cinema");
-                });
-
             modelBuilder.Entity("EFCoreMovies.Entities.CinemaOffer", b =>
                 {
                     b.HasOne("EFCoreMovies.Entities.Cinema", null)
@@ -188,8 +161,6 @@ namespace EFCoreMovies.Migrations
 
             modelBuilder.Entity("EFCoreMovies.Entities.Cinema", b =>
                 {
-                    b.Navigation("CinemaHalls");
-
                     b.Navigation("CinemaOffer");
                 });
 #pragma warning restore 612, 618
