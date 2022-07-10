@@ -1,4 +1,6 @@
-﻿using EFCoreMovies.DTO;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using EFCoreMovies.DTO;
 using EFCoreMovies.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,18 +13,22 @@ namespace EFCoreMovies.Controllers
     public class ActorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ActorsController(ApplicationDbContext context)
+        public ActorsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
+
+        public IMapper Mapper { get; }
 
         [HttpGet]
         public async Task<IEnumerable<ActorDTO>> Get(int page = 1, int recordsToTake = 2)
         {
             return await _context.Actors.AsNoTracking()
                 .OrderBy(x => x.Name)
-                .Select(a => new ActorDTO { Id = a.Id, Name = a.Name, DateOfBirth = a.DateOfBirth })
+                .ProjectTo<ActorDTO>(_mapper.ConfigurationProvider)
                 .Paginate(page, recordsToTake)
                 .ToListAsync();
         }
