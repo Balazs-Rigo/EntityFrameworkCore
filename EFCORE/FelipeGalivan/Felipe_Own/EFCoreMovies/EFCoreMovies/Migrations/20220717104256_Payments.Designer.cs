@@ -4,6 +4,7 @@ using EFCoreMovies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace EFCoreMovies.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220717104256_Payments")]
+    partial class Payments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -689,27 +691,6 @@ namespace EFCoreMovies.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EFCoreMovies.Entities.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
-                });
-
             modelBuilder.Entity("GenreMovie", b =>
                 {
                     b.Property<int>("GenresId")
@@ -817,41 +798,6 @@ namespace EFCoreMovies.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EFCoreMovies.Entities.Merchandising", b =>
-                {
-                    b.HasBaseType("EFCoreMovies.Entities.Product");
-
-                    b.Property<bool>("Available")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsClothing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsCollectionable")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("Volume")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
-                    b.ToTable("Merchandising", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            Name = "One Price T-Shirt",
-                            Price = 11m,
-                            Available = true,
-                            IsClothing = true,
-                            IsCollectionable = false,
-                            Volume = 1.0,
-                            Weight = 1.0
-                        });
-                });
-
             modelBuilder.Entity("EFCoreMovies.Entities.PaypalPayment", b =>
                 {
                     b.HasBaseType("EFCoreMovies.Entities.Payment");
@@ -879,25 +825,6 @@ namespace EFCoreMovies.Migrations
                             PaymentDate = new DateTime(2022, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PaymentType = 1,
                             EmailAddress = "claudia@hotmail.com"
-                        });
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.RentableMovie", b =>
-                {
-                    b.HasBaseType("EFCoreMovies.Entities.Product");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.ToTable("RentableMovies", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Spider/Man",
-                            Price = 5.99m,
-                            MovieId = 1
                         });
                 });
 
@@ -984,24 +911,6 @@ namespace EFCoreMovies.Migrations
                         .WithMany()
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.Merchandising", b =>
-                {
-                    b.HasOne("EFCoreMovies.Entities.Product", null)
-                        .WithOne()
-                        .HasForeignKey("EFCoreMovies.Entities.Merchandising", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EFCoreMovies.Entities.RentableMovie", b =>
-                {
-                    b.HasOne("EFCoreMovies.Entities.Product", null)
-                        .WithOne()
-                        .HasForeignKey("EFCoreMovies.Entities.RentableMovie", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 

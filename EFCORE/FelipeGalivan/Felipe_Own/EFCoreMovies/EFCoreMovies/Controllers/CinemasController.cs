@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using EFCoreMovies.DTO;
 using EFCoreMovies.Entities;
+using EFCoreMovies.Entities.Keyless;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite;
@@ -49,6 +50,71 @@ namespace EFCoreMovies.Controllers
                 }).ToListAsync();
 
             return Ok(cinemas);
+        }
+
+        [HttpPost("withoutLocation")]
+        public async Task<IEnumerable<CinemaWithoutLocation>> GetWithoutLocation()
+        {
+            return await _context.Set<CinemaWithoutLocation>().ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Post()
+        {
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+            var cinemaLocation = geometryFactory.CreatePoint(new Coordinate(-69.913539, 18.476256));
+
+            var cinema = new Cinema()
+            {
+                Name = "My cinema",
+                Location = cinemaLocation,
+                CinemaOffer = new CinemaOffer()
+                {
+                    DiscountPercentage = 5,
+                    Begin = DateTime.Today,
+                    End = DateTime.Today.AddDays(7)
+                },
+                CinemaHalls = new HashSet<CinemaHall>()
+                {
+                    new CinemaHall()
+                    {
+                        Cost=200,
+                        Currency = Currency.DominicanPeso,
+                        CinemaHallType = CinemaHallType.TwoDimensions
+                    },
+                    new CinemaHall()
+                    {
+                        Cost=250,
+                        Currency = Currency.USDollar,
+                        CinemaHallType = CinemaHallType.ThreeDimensions
+                    },
+                }
+            };
+            _context.Add(cinema);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("withDTO")]
+        public async Task<ActionResult> Post(CinemaCreationDTO cinemaCreationDTO)
+        {
+            var cinema = mapper.Map<Cinema>(cinemaCreationDTO);
+            _context.Add(cinema);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var cinema = await _context.Cinemas.Include(p => p.CinemaHalls).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (cinema is null)
+                return NotFound();
+
+            _context.Remove(cinema);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
     }
 }

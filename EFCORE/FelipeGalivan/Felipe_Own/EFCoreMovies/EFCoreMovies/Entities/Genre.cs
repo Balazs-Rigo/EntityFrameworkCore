@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EFCoreMovies.Entities
@@ -7,6 +8,7 @@ namespace EFCoreMovies.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool IsDeleted { get; set; }
         public HashSet<Movie> Movies { get; set; }
     }
 }

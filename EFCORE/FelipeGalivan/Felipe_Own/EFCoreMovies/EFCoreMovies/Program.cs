@@ -16,7 +16,6 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    //options.UseLazyLoadingProxies();
     options.UseSqlServer("name=DefaultConnection", sqlserver => sqlserver.UseNetTopologySuite());
 });
 
